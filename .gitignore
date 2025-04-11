@@ -1,13 +1,8 @@
-# OS generated files
+# OS
 .DS_Store
-.DS_Store?
 ._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
 
-# IDE files
+# IDE
 .idea/
 .vscode/
 *.swp
@@ -16,26 +11,27 @@ Thumbs.db
 # Dependencies
 node_modules/
 vendor/
-composer.lock
-package-lock.json
+*.lock
 
-# Environment files
-.env
-.env.local
-.env.*.local
-
-# Build files
-dist/
-build/
-*.min.js
-*.min.css
+# Environment
+.env*
+!.env.example
 
 # Logs
 *.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+logs/
 
 # Cache
+__pycache__/
 .cache/
-.temp/ 
+.temp/
+
+# Database
+*.sqlite3
+*.db
+
+# Large files
+*.zip
+*.tar.gz
+*.rar
+*.7z 

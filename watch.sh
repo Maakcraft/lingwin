@@ -7,20 +7,25 @@ cd /Users/maak/Dropbox/Projects/lingwin
 backup() {
     # Проверяем, есть ли изменения для коммита
     if git status --porcelain | grep -q '^.M'; then
+        # Получаем список измененных файлов
+        changed_files=$(git status --porcelain | cut -c4-)
+        
+        # Создаем осмысленное сообщение коммита
+        commit_msg="backup: $(date '+%Y-%m-%d %H:%M:%S')\n\nChanged files:\n$changed_files"
+        
         git add .
-        git commit -m "Auto backup $(date '+%Y-%m-%d %H:%M:%S')"
+        git commit -m "$commit_msg"
         git push
         echo "Backup created successfully"
     fi
 }
 
-# Запускаем fswatch для отслеживания только открытия файлов
+# Запускаем fswatch для отслеживания изменений файлов
 # Флаги:
-# -e ".*" - исключаем временные файлы
-# --event OpenFD - только события открытия файла
-/opt/homebrew/bin/fswatch -e ".*\\.swp$" -e ".*\\.swx$" -e "\\.git/*" --event OpenFD . | while read -r event; do
-    echo "File opened at $(date '+%Y-%m-%d %H:%M:%S'): $event"
-    # Ждем 2 секунды, чтобы файл успел измениться
-    sleep 2
+# -e - исключаем временные файлы и git
+# -l 1 - задержка в 1 секунду между событиями
+# -0 - разделяем события нулевым байтом
+/opt/homebrew/bin/fswatch -e ".*\\.swp$" -e ".*\\.swx$" -e "\\.git/*" -l 1 -0 . | while read -d "" event; do
+    echo "File changed at $(date '+%Y-%m-%d %H:%M:%S'): $event"
     backup
 done 
