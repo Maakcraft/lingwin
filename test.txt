@@ -1,2 +1,1 @@
-This is a test file for backup system
-Adding a new line to test auto-backup 
+test
